@@ -37,6 +37,8 @@ def tripleDES2key(key1, key2, plaintext):
       enkrip_cipher_text = encrypt_3DES_2key(key1, key2, i)
       dekrip_cipher_text = decrypt_3DES_2key(key1, key2, enkrip_cipher_text)
       print(i, " | ", enkrip_cipher_text, " | ", dekrip_cipher_text)
+      print("-------------")
+    print('\n')
     
 def tripleDES_3key_encrypt(key1, key2, key3, plaintext):
     enkripsi_key1 = encrypt(ord(key1), ord(plaintext)) # Enkripsi (Key1, Plaintext)
@@ -100,7 +102,7 @@ if __name__ == '__main__':
     counter = random.randrange(256)
     a = ctr_encrypt(k, counter, plainText)
     b = ctr_decrypt(k, counter, a)
-    tripleDES2key(key1, key2, plaintext)
+    tripleDES2key(key1, key2, plainText)
     tripleDES3key(key1, key2, key3, plainText)
 
     print("=========== CTR ===========")
