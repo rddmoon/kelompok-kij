@@ -2,13 +2,42 @@ import random
 import sdes
 from sdes import *
 
+# Rumus triple DES 2 keys 
+# Cipher text = E(Key1, D(Key2, E(Key1, Plaintext)))
+# Plain Text = D(Key1, E(Key2, D(Key1, Chipertext)))
+
 # Triple DES with 3 Keys
 
 # Rumus triple DES 3 keys 
 # Cipher text = E(Key3, D(Key2, E(Key1, Plaintext)))
 # Plain Text = D(Key1, E(Key2, D(Key3, Chipertext)))
 
+def encrypt_3DES_2key(key1, key2, plaintext):
+    """Encrypt plaintext with given key"""
+    enkrip_key1 = encrypt(ord(key1), ord(plaintext))
+    dekrip_key2 = decrypt(ord(key2), enkrip_key1)
+    enkrip_key1 = encrypt(ord(key1), dekrip_key2)    
+    current_text = chr(enkrip_key1)
+    return current_text
 
+
+def decrypt_3DES_2key(key1, key2, ciphertext):
+    """Decrypt ciphertext with given key"""
+    dekrip_key1 = decrypt(ord(key1), ord(ciphertext))
+    enkrip_key2 = encrypt(ord(key2), dekrip_key1)
+    dekrip_key1 = decrypt(ord(key1), enkrip_key2)    
+    current_text = chr(dekrip_key1)
+    return current_text
+
+def tripleDES2key(key1, key2, plaintext):
+    print("========= Hasil Triple DES dengan 2 keys =========")
+    print ("J  | K   | R ")
+    print("-------------")
+    for i in plaintext:
+      enkrip_cipher_text = encrypt_3DES_2key(key1, key2, i)
+      dekrip_cipher_text = decrypt_3DES_2key(key1, key2, enkrip_cipher_text)
+      print(i, " | ", enkrip_cipher_text, " | ", dekrip_cipher_text)
+    
 def tripleDES_3key_encrypt(key1, key2, key3, plaintext):
     enkripsi_key1 = encrypt(ord(key1), ord(plaintext)) # Enkripsi (Key1, Plaintext)
     dekripsi_key2 = decrypt(ord(key2), enkripsi_key1) # Dekripsi hasil dari enkripsi diatas
@@ -71,6 +100,7 @@ if __name__ == '__main__':
     counter = random.randrange(256)
     a = ctr_encrypt(k, counter, plainText)
     b = ctr_decrypt(k, counter, a)
+    tripleDES2key(key1, key2, plaintext)
     tripleDES3key(key1, key2, key3, plainText)
 
     print("=========== CTR ===========")
