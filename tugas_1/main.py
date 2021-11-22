@@ -105,17 +105,22 @@ def counterMode(k, counter, plainText):
     print("=========== CTR ===========")
     print("P  |  C  | D ")
     print("-------------")
+    c = ""
+    d = ""
     for i in plainText:
         encrypted = ctr_encrypt(k, counter, i)
         decrypted = ctr_decrypt(k, counter, encrypted)
         counter += 1
         counter %= 256
+        c += encrypted
+        d += decrypted
         print(i, " | ", encrypted, " | ", decrypted)
         print("-------------")
     print('\n')
     # print('Plaintext: ', plainText)
-    # print('Encrypt: ', a)
-    # print('Decrypt: ', b)
+    # print('Encrypt: ', c)
+    # print('Decrypt: ', d)
+    print('\n')
 
 if __name__ == '__main__':
     k = 0b1110001110
