@@ -25,13 +25,14 @@ def MAC(k, m):
 
 def enkrip_message_internal(key, message):
     F = MAC(key, message)
+    #print(F)
     F = message + '||' + F
     textToProcess = ""
     for i in F:
         i = ord(i)
         i = encrypt(key, i)
         textToProcess += chr(i)
-
+    #print(textToProcess)
     return textToProcess
 
 def dekrip_message_internal(key, cipher):
@@ -46,6 +47,9 @@ def dekrip_message_internal(key, cipher):
     
     M = textToProcess.split("||")[0]
     F = textToProcess.split("||")[1]
+
+    #print(M)
+    #print(F)
 
     #validasi
     if MAC(key, M) == F:
