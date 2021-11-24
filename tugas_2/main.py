@@ -2,37 +2,39 @@ import sdes
 from sdes import *
 
 def MAC(k, m):
-    ctr = 0
+    counter = 0
     index = 0
     textToProcess = ""
     for i in m:
-        i = ord(i)
-        if (ctr == 0):
-            i = encrypt(k, i)
-            ctr = 1
-            textToProcess += chr(i)
+        i = ord(i) #setiap karakter diubah jadi unicode
+        if (counter == 0):
+            i = encrypt(k, i) #i dienkripsi menggunakan k
+            counter = 1
+            textToProcess += chr(i) #ngumpulin karakter yang diubah jadi string lagi
+            #print(textToProcess)
         else:
-            i = i ^ ord(textToProcess[index-1])
+            i = i ^ ord(textToProcess[index-1]) 
             i = encrypt(k, i)
             textToProcess += chr(i)
         index += 1
     
-    for i in textToProcess: 
-        if (not isinstance(i, str)):
-            i = chr(i)
 
-    return textToProcess[11:24]
+    for i in textToProcess: 
+        if (not isinstance(i, str)): #mastiin bahwa tiap i di texttoprocess itu unicode
+            i = chr(i) #ngubah ke string
+
+    return textToProcess
 
 def enkrip_message_internal(key, message):
     F = MAC(key, message)
-    #print(F)
     F = message + '||' + F
+    #print("testing f internal",F)
     textToProcess = ""
     for i in F:
         i = ord(i)
         i = encrypt(key, i)
         textToProcess += chr(i)
-    #print(textToProcess)
+   #print("testing en_internal",textToProcess)
     return textToProcess
 
 def dekrip_message_internal(key, cipher):
@@ -45,13 +47,14 @@ def dekrip_message_internal(key, cipher):
         i = decrypt(key, i)
         textToProcess += chr(i)
     
-    M = textToProcess.split("||")[0]
-    F = textToProcess.split("||")[1]
+    M = textToProcess.split("||") [0]
+    F = textToProcess.split("||") [1]
 
-    #print(M)
-    #print(F)
+   # print("pengentau M :" , M) #ngecek M value nya apa 
+  #  print("Pengentau F:" , F) #ngecek F value nya apa
+ #   print("Pengetau mac m:", MAC(key,M)) #ngecek M setelah dienkripsi pake Mac function
 
-    #validasi
+    #validasi/mastiin hasi enkripsi M dengan mac function sama dengan F
     if MAC(key, M) == F:
       valid = True
     
@@ -63,8 +66,10 @@ def enkrip_message_external(key, message):
         i = ord(i)
         i = encrypt(key, i)
         textToProcess += chr(i)
+    #print(textToProcess)
     F = MAC(key, textToProcess)
     F = textToProcess + '||' + F
+    #print (F)
     return F
 
 def dekrip_message_external(key, cipher):
@@ -87,7 +92,7 @@ def dekrip_message_external(key, cipher):
     return textToProcess, valid
 
 if __name__ == '__main__':
-    plaintext = "Almamaterku yang kucinta, Ibu yang Luhur ITS"
+    plaintext = "aku terlalu buruk untuk kamu"
     key1 = 0b1110001110
     key2 = 0b1110011111
     key3 = 0b1100111100
