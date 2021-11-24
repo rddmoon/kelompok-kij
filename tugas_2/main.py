@@ -4,51 +4,46 @@ from sdes import *
 def MAC(k, m):
     counter = 0
     index = 0
-    textToProcess = ""
+    MACtext = ""
     for i in m:
         i = ord(i) #setiap karakter diubah jadi unicode
         if (counter == 0):
             i = encrypt(k, i) #i dienkripsi menggunakan k
             counter = 1
-            textToProcess += chr(i) #ngumpulin karakter yang diubah jadi string lagi
-            #print(textToProcess)
+            MACtext += chr(i) #ngumpulin karakter yang diubah jadi string lagi
+            #print(MACtext)
         else:
-            i = i ^ ord(textToProcess[index-1]) 
+            i = i ^ ord(MACtext[index-1]) 
             i = encrypt(k, i)
-            textToProcess += chr(i)
+            MACtext += chr(i)
         index += 1
-    
 
-    for i in textToProcess: 
-        if (not isinstance(i, str)): #mastiin bahwa tiap i di texttoprocess itu unicode
-            i = chr(i) #ngubah ke string
-
-    return textToProcess
+    return MACtext
 
 def enkrip_message_internal(key, message):
     F = MAC(key, message)
     F = message + '||' + F
     #print("testing f internal",F)
-    textToProcess = ""
+    internalText = ""
     for i in F:
         i = ord(i)
         i = encrypt(key, i)
-        textToProcess += chr(i)
+        internalText += chr(i)
    #print("testing en_internal",textToProcess)
-    return textToProcess
+    return internalText
 
 def dekrip_message_internal(key, cipher):
-    textToProcess = ""
+    internalText = ""
     valid = False
     F = ""
 
     for i in cipher:
         i = ord(i)
         i = decrypt(key, i)
-        textToProcess += chr(i)
+        internalText += chr(i)
     
-    M = textToProcess.split("||") [0]
-    F = textToProcess.split("||") [1]
+    M = internalText.split("||") [0]
+    F = internalText.split("||") [1]
 
    # print("pengentau M :" , M) #ngecek M value nya apa 
   #  print("Pengentau F:" , F) #ngecek F value nya apa
@@ -61,19 +56,19 @@ def dekrip_message_internal(key, cipher):
     return M, valid
 
 def enkrip_message_external(key, message):
-    textToProcess = ""
+    externalText = ""
     for i in message:
         i = ord(i)
         i = encrypt(key, i)
-        textToProcess += chr(i)
+        externalText += chr(i)
     #print(textToProcess)
-    F = MAC(key, textToProcess)
-    F = textToProcess + '||' + F
+    F = MAC(key, externalText)
+    F = externalText + '||' + F
     #print (F)
     return F
 
 def dekrip_message_external(key, cipher):
-    textToProcess = ""
+    externalText = ""
     valid = False
     F = ""
     
@@ -87,9 +82,9 @@ def dekrip_message_external(key, cipher):
     for i in M:
         i = ord(i)
         i = decrypt(key, i)
-        textToProcess += chr(i)
+        externalText += chr(i)
     
-    return textToProcess, valid
+    return externalText, valid
 
 if __name__ == '__main__':
     plaintext = "aku terlalu buruk untuk kamu"
