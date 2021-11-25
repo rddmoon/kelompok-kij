@@ -13,7 +13,7 @@ def MAC(k, m):
             MACtext += chr(i) #ngumpulin karakter yang diubah jadi string lagi
             #print(MACtext)
         else:
-            i = i ^ ord(MACtext[index-1]) 
+            i = i ^ ord(MACtext[index-1])  
             i = encrypt(k, i)
             MACtext += chr(i)
         index += 1
